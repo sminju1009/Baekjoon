@@ -1,17 +1,23 @@
-# test
+# 투 포인터
 
-N = int(input())
-M = int(input())
-my_list = list(map(int, input().split()))
+n = int(input())
+m = int(input()) # target
+arr = list(map(int, input().split()))
+arr.sort()
 
-
-length = len(my_list)
+start = 0
+end = n-1
 cnt = 0
 
-for i in range(0, length-1):
-    for j in range(i+1, length):
-        result = my_list[i] + my_list[j]
-        if result != M: continue
-        cnt += 1 
-
+while start<end:
+    sum_num = arr[start] + arr[end]
+    if sum_num < m:
+        start += 1
+    elif sum_num > m:
+        end -= 1
+    else:
+        cnt += 1
+        start += 1
+        end -= 1
+        
 print(cnt)
