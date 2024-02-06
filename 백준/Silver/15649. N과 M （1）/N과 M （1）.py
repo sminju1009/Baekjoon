@@ -1,22 +1,19 @@
-# 문어박사님 풀이
-
-def dfs(n, lst):
-    # 종료조건(n에 관련된 형태) 처리, 정답 처리
-    if n==M:            # m개의 수열을 완성
-        ans.append(lst)
+def dfs(level):
+    if level==m:
+        print(*lst)
         return
+    for i in range(1, n+1):
+        if path[i-1]==0:
+            path[i-1] = 1
+            lst.append(i)
+            dfs(level+1)
+            path[i-1] = 0
+            lst.remove(lst[-1])
 
-    # 하부(단계)함수 호출
-    for j in range(1, N+1):
-        if v[j]==0:         # 선택하지 않은 숫자인 경우 추가
-            v[j] = 1
-            dfs(n+1, lst+[j])
-            v[j] = 0        # 다녀와서는 0으로 초기화
 
-N, M = map(int, input().split())
-ans = []                    # 정답을 저장할 리스트
-v = [0] * (N+1)             # 중복을 확인할 visited 배열
+n, m = map(int, input().split())
+arr = [i for i in range(1, n+1)]
+path = [0] * n
+lst = []
 
-dfs(0, [])
-for lst in ans:
-    print(*lst)
+dfs(0)
