@@ -1,25 +1,21 @@
-# chatgpt
-
 from collections import deque
 
-def bfs(n, k):
-    visited = [False] * 100001  # 방문 여부를 저장할 리스트
-    q = deque([(n, 0)])  # 시작 위치와 시간을 큐에 넣음
+def bfs():
+    q = deque()
+    q.append(n)
+    visited[n] = 1
 
     while q:
-        current, time = q.popleft()
+        y = q.popleft()
+        if y==k:
+            print(visited[k]-1)
+            return
+        for dy in (y*2, y+1, y-1):
+            if 0<=dy<=100000 and visited[dy]==0:
+                visited[dy] = visited[y] + 1
+                q.append(dy)
 
-        if current == k:  # 목표 위치에 도달했을 때
-            return time
-
-        # 다음 이동할 위치들을 계산
-        next_positions = [current - 1, current + 1, current * 2]
-
-        for next_pos in next_positions:
-            if 0 <= next_pos <= 100000 and not visited[next_pos]:
-                visited[next_pos] = True
-                q.append((next_pos, time + 1))
 
 n, k = map(int, input().split())
-result = bfs(n, k)
-print(result)
+visited = [0]*100001
+bfs()
