@@ -1,34 +1,30 @@
-# bfs
+import sys
+sys.setrecursionlimit(10**6)
 
-from collections import deque
-
-def bfs(y, x, color):
-    q = deque()
-    q.append((y, x))
+def dfs(y, x, color):
+    global cnt
     visited[y][x] = 1
-    cnt = 1
-
-    while q:
-        y, x = q.popleft()
-        for dy, dx in ((0, -1), (-1, 0), (0, 1), (1, 0)):
-            ny, nx = dy+y, dx+x
-            if 0<=ny<n and 0<=nx<m and visited[ny][nx]==0 and arr[ny][nx]==color:
-                cnt += 1
-                q.append((ny, nx))
-                visited[ny][nx] = 1
-
-    return cnt
+    cnt += 1
+    for dy, dx in ((0, -1), (-1, 0), (0, 1), (1, 0)):
+        ny, nx = dy + y, dx + x
+        if 0 <= ny < n and 0 <= nx < m and arr[ny][nx] == color and visited[ny][nx] == 0:
+            dfs(ny, nx, color)
 
 m, n = map(int, input().split())
-arr = [list(input()) for _ in range(n)]
-visited = [[0]*m for _ in range(n)]
+arr = [list(input().strip()) for _ in range(n)]
+visited = [[0] * m for _ in range(n)]
 
 w, b = 0, 0
+# W = 우리팀 병사 / B = 적국 병사
 for i in range(n):
     for j in range(m):
-        if arr[i][j]=='W' and visited[i][j]==0:
-            w += bfs(i, j, arr[i][j])**2
-        elif arr[i][j]=='B' and visited[i][j]==0:
-            b += bfs(i, j, arr[i][j])**2
+        if arr[i][j] == 'W' and visited[i][j] == 0:
+            cnt = 0
+            dfs(i, j, 'W')
+            w += cnt**2
+        elif arr[i][j] == 'B' and visited[i][j] == 0:
+            cnt = 0
+            dfs(i, j, 'B')
+            b += cnt**2
 
 print(w, b)
