@@ -1,27 +1,19 @@
-def dfs(level):
-    global s, b, diff
-     # 쓴맛과 신맛의 차이
-    if level==n:
-        return diff
-    for i in range(n):
-        if visited[i] ==0:
-            s *= tastes[i][0]
-            b += tastes[i][1]
-            visited[i] = 1
-            diff = min(diff, abs(s-b))
-            dfs(level+1)
-            visited[i] = 0
-            s //= tastes[i][0]
-            b -= tastes[i][1]
+def dfs(level, s, b, selected):
+    global diff
+    if level == n:
+        if selected > 0:
+            diff = min(diff, abs(s - b))
+        return
+    # 현재 재료를 선택하는 경우
+    dfs(level + 1, s * tastes[level][0], b + tastes[level][1], selected + 1)
+    # 현재 재료를 선택하지 않는 경우
+    dfs(level + 1, s, b, selected)
 
 n = int(input())
-tastes = []
-for _ in range(n):
-    tastes.append(list(map(int, input().split())))
+tastes = [list(map(int, input().split())) for _ in range(n)]
 
 s, b = 1, 0    # 신맛, 쓴맛
 diff = 1e9
-visited = [0] * n
 
-dfs(0)
+dfs(0, 1, 0, 0)
 print(diff)
