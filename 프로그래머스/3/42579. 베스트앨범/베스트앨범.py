@@ -1,18 +1,17 @@
+from collections import defaultdict
+
 def solution(genres, plays):
     answer = []
-    total = {}
-    gen_dic = {}
+    total = defaultdict(int)
+    gen_dic = defaultdict(list)
     
     for i in range(len(genres)):
         genre = genres[i]
         play = plays[i]
-        if genres[i] in total.keys():
-            total[genres[i]] += plays[i]
-            gen_dic[genres[i]].append((plays[i], i))
-        else:
-            total[genres[i]] = plays[i]
-            gen_dic[genre] = [(play, i)]
-            
+        
+        total[genre] += play
+        gen_dic[genre].append((play, i))
+
     total = sorted(total.items(), key=lambda x: x[1], reverse=True)
     
     for key in total:
