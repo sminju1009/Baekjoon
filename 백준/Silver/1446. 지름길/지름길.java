@@ -1,81 +1,59 @@
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Scanner;
-
-class Node implements Comparable<Node> {
-    int destination;
-    int cost;
-
-    public Node(int destination, int cost) {
-        this.destination = destination;
-        this.cost = cost;
-    }
-
-    @Override
-    public int compareTo(Node other) {
-        return this.cost - other.cost;
-    }
-}
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    static class Node{
+        int node;
+        int weight;
 
-        int n = scanner.nextInt();
-        int d = scanner.nextInt();
-        ArrayList<ArrayList<Node>> arr = new ArrayList<>();
+        Node(int node, int weight) {
+            this.node = node;
+            this.weight = weight;
+        }
+    }
+    static int n, d;
 
-        for (int i = 0; i <= d; i++) {
-            arr.add(new ArrayList<>());
+    static int[] result;
+    static List<List<Node>> graph = new ArrayList<>();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st=  new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken()); // 지름길의 갯수
+        d = Integer.parseInt(st.nextToken()); // 고속도로의 길이
+
+        for (int i = 0; i<10001; i++) {
+            graph.add(new ArrayList<>());
         }
 
-        // 거리를 1로 초기화
-        for (int i = 0; i < d; i++) {
-            arr.get(i).add(new Node(i + 1, 1));
+        result = new int[d+1];
+        for (int i = 0; i<result.length; i++) {
+            result[i] = i;
         }
 
-        // 지름길이 있는 경우에 업데이트
-        for (int i = 0; i < n; i++) {
-            int a = scanner.nextInt();
-            int b = scanner.nextInt();
-            int c = scanner.nextInt();
-            if (b > d) {
-                continue;
+        for (int i = 0; i<n; i++) {
+            st = new StringTokenizer(br.readLine());
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            int cost = Integer.parseInt(st.nextToken());
+            if (end<=d) {
+                graph.get(start).add(new Node(end, cost));
             }
-            arr.get(a).add(new Node(b, c));
+
         }
 
-        int inf = Integer.MAX_VALUE;
-        int[] result = new int[d + 1];
-        for (int i = 0; i <= d; i++) {
-            result[i] = inf;
-        }
-
-        dijkstra(0, arr, result);
-
+        dijkstra(0);
         System.out.println(result[d]);
-        scanner.close();
     }
 
-    public static void dijkstra(int start, ArrayList<ArrayList<Node>> arr, int[] result) {
-        PriorityQueue<Node> heap = new PriorityQueue<>();
-        heap.add(new Node(start, 0));
-        result[start] = 0;
-
-        while (!heap.isEmpty()) {
-            Node current = heap.poll();
-            int sk = current.cost;
-            int k = current.destination;
-
-            if (sk > result[k]) {
-                continue;
+    static void dijkstra(int start) {
+        for (int i = start; i<d; i++) {
+            if (result[i+1] > result[i] + 1) {
+                result[i+1] = result[i] + 1;
             }
-
-            for (Node node : arr.get(k)) {
-                int cost = sk + node.cost;
-                if (cost < result[node.destination]) {
-                    result[node.destination] = cost;
-                    heap.add(new Node(node.destination, cost));
+            for (Node node: graph.get(i)) {
+                if (result[i] + node.weight < result[node.node]) {
+                    result[node.node] = result[i] + node.weight;
                 }
             }
         }
