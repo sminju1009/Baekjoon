@@ -5,19 +5,17 @@ def solution(cards):
     box_list = []
     
     def bfs(num):
-        q = deque([num])
+        q = deque()
+        q.append((num, 1))
         visited[num] = 1
-        level = 0
         
         while q:
-            y = q.popleft()
-            level += 1
-            next_card = cards[y] - 1
-            if not visited[next_card]:
-                visited[next_card] = 1
-                q.append(next_card)
-        
-        return level
+            y, level = q.popleft()
+            if not visited[cards[y]-1]:
+                visited[cards[y]-1] = 1
+                q.append((cards[y]-1, level+1))
+            else:
+                return level
     
     for i in range(len(cards)):
         if not visited[i]:
