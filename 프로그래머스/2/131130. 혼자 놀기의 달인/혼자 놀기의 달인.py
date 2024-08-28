@@ -1,22 +1,31 @@
+from collections import deque
+
 def solution(cards):
-    visited = [0] * len(cards)      # 준비한 카드 수만큼 작은 상자 하나 준비
+    visited = [0] * len(cards)
+    box_list = []
     
-    def dfs(num):
-        size = 0
-        while not visited[num]:
-            visited[num] = 1
-            num = cards[num] - 1
-            size += 1
-        return size
-    
-    group_sizes = []
+    def bfs(num):
+        q = deque([num])
+        visited[num] = 1
+        level = 0
+        
+        while q:
+            y = q.popleft()
+            level += 1
+            next_card = cards[y] - 1
+            if not visited[next_card]:
+                visited[next_card] = 1
+                q.append(next_card)
+        
+        return level
     
     for i in range(len(cards)):
         if not visited[i]:
-            group_sizes.append(dfs(i))
+            box_list.append(bfs(i))
+            
+    box_list.sort(reverse=True)
     
-    if len(group_sizes) < 2:
+    if len(box_list) < 2:
         return 0
     else:
-        group_sizes.sort(reverse=True)
-        return group_sizes[0] * group_sizes[1]
+        return box_list[0] * box_list[1]
