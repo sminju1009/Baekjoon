@@ -1,21 +1,16 @@
-# dfs 이용
-
-def dfs(level, hp, happy):
-    global now_hp, now_happy
-    if level == n:
-        now_happy = max(now_happy, happy)
-        return
-    dfs(level + 1, hp, happy)
-    if hp - minus_hp[level] > 0:
-        dfs(level + 1, hp - minus_hp[level], happy + gain_happy[level])
+# dp
 
 n = int(input())
-minus_hp = list(map(int, input().split()))
-gain_happy = list(map(int, input().split()))
+minus_hp = [0] + list(map(int, input().split()))
+gain_happy = [0] + list(map(int, input().split()))
 
-now_hp = 100 # 주어진 체력
-now_happy = 0 # 현재 기쁨
+dp = [[0]*(101) for _ in range(n+1)]
 
-dfs(0, 100, 0)
+for i in range(1, n+1):
+    for j in range(1, 101):
+        if minus_hp[i] <= j:
+            dp[i][j] = max(dp[i-1][j], dp[i-1][j-minus_hp[i]] + gain_happy[i])
+        else:
+            dp[i][j] = dp[i-1][j]
 
-print(now_happy)
+print(dp[n][99])
