@@ -1,18 +1,20 @@
+import sys
+input = sys.stdin.readline
+
 n, m = map(int, input().split())
 arr = []
 for _ in range(n):
     arr.append(int(input()))
 
 start, end = 1, max(arr)*m
-people = [0] * n
 result = 0
 
 while start<=end:
     mid = (start+end)//2
 
+    level = 0
     for i in range(n):
-        people[i] = mid//arr[i]
-    level = sum(people)
+        level += mid//arr[i]
 
     if level>=m:
         end = mid-1
