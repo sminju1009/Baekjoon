@@ -17,6 +17,7 @@ class Node implements Comparable<Node> {
 class Solution {
     static int INF = 987654321;
     static List<Node>[] list;
+    static int[] dist;
 
     public int[] solution(int n, int[][] roads, int[] sources, int destination) {
         int[] answer = new int[sources.length];
@@ -31,7 +32,10 @@ class Solution {
             list[roads[i][1]].add(new Node(roads[i][0], 1));
         }
         
-        int[] dist = dijkstra(destination, n);
+        dist = new int[n+1];
+        Arrays.fill(dist, INF);
+        
+        dijkstra(destination, n);
         
         for (int i = 0; i < sources.length; i++) {
             if (dist[sources[i]] == INF) {
@@ -44,16 +48,18 @@ class Solution {
         return answer;
     }
     
-    private int[] dijkstra(int destination, int n) {
+    private void dijkstra(int destination, int n) {
         PriorityQueue<Node> q = new PriorityQueue<>();
-        int[] dist = new int[n + 1];
-        Arrays.fill(dist, INF);
+        boolean[] check = new boolean[n+1];
         dist[destination] = 0;
         q.add(new Node(destination, 0));
         
         while (!q.isEmpty()) {
             Node curr = q.poll();
             int cur = curr.end;
+            
+            if (check[cur]) continue;
+            check[cur] = true;
             
             for (Node node : list[cur]) {
                 if (dist[node.end] > dist[cur] + node.weight) {
@@ -62,7 +68,5 @@ class Solution {
                 }
             }
         }
-        
-        return dist;
     }
 }
