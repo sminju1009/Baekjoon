@@ -25,12 +25,14 @@ public class Main {
             rotate();
         }
 
+        StringBuilder sb = new StringBuilder(); // 기존 코드에서 stringbuilder 사용
         for (int i = 0; i<n; i++) {
             for (int j = 0; j<m; j++) {
-                System.out.print(arr[i][j] + " ");
+                sb.append(arr[i][j] + " ");
             }
-            System.out.println();
+            sb.append("\n");
         }
+        System.out.println(sb);
 
     }
 
