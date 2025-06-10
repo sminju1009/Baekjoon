@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Main {
+public class Main{
 
     static int count = 0;
 
@@ -21,7 +21,7 @@ public class Main {
         System.out.println(sb);
     }
 
-    public static boolean isSafe(String str) {
+    public static void isSafe(String str) {
         int cnt = 0;
 
         Stack<Character> stack = new Stack<>();
@@ -40,10 +40,5 @@ public class Main {
         }
 
         count = cnt + stack.size()/2;
-        if (stack.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }
